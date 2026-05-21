@@ -12,12 +12,21 @@ oc project   # shiko projektin aktiv
 ## Hapi 1–2 — Build Maven (krijo JAR)
 
 ```bash
-cd student-management
-./mvnw clean package -DskipTests
-# ose: mvn clean package -DskipTests
+# SIGUROHU qe je ne folderin e sakte (JO dy here ProjektCloud/...)
+cd ~/ProjektCloud/student-management
+pwd
+# duhet: .../ProjektCloud/student-management
 
-ls target/*.jar
-# duhet: target/student-management.jar
+# Leje ekzekutimi per mvnw (nese: Permission denied)
+chmod +x mvnw
+
+./mvnw clean package -DskipTests
+# OSE nese prap merr gabim:
+# sh mvnw clean package -DskipTests
+# OSE: mvn clean package -DskipTests
+
+ls -la target/student-management.jar
+# DUHET te ekzistoje para oc start-build!
 ```
 
 ---
@@ -54,15 +63,16 @@ oc start-build projektcloud --from-dir=. --follow
 
 ## Hapi 5 — Deploy
 
+**Vetem PAS build SUCCESS!**
+
 ```bash
-oc new-app projektcloud --name=projektcloud
+oc new-app image-registry.openshift-image-registry.svc:5000/$(oc project -q)/projektcloud:latest --name=projektcloud
 ```
 
-Nëse thotë që ekziston, përdor:
+Ose:
 
 ```bash
-oc delete all -l app=projektcloud
-oc new-app projektcloud
+oc new-app projektcloud:latest --name=projektcloud
 ```
 
 ---
