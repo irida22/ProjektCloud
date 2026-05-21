@@ -1,8 +1,9 @@
 # OpenShift: Import from Git (repo root) — Docker strategy, JO Java S2I
-# Multi-module: JAR = student-management/web/target/student-management.jar
+# JAR: student-management/web/target/student-management.jar
 
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
+ENV MAVEN_OPTS="-Xmx1024m"
 COPY student-management/pom.xml student-management/pom.xml
 COPY student-management/model/pom.xml student-management/model/
 COPY student-management/dto/pom.xml student-management/dto/
@@ -19,7 +20,7 @@ COPY student-management/service/src student-management/service/src
 COPY student-management/excel/src student-management/excel/src
 COPY student-management/web/src student-management/web/src
 WORKDIR /app/student-management
-RUN mvn clean package -DskipTests -pl web -am -B -q
+RUN mvn clean package -DskipTests -Dmaven.test.skip=true -pl web -am -B
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
