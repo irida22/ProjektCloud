@@ -11,6 +11,8 @@ metadata:
   name: student-management
   labels:
     app: student-management
+  annotations:
+    description: "Docker build - Maven multi-stage, JAR ne imazh"
 spec:
   source:
     type: Git
