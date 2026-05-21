@@ -81,10 +81,11 @@ Moduli `repository` ofron metoda `findAll`, `save`, `delete` dhe query custom pÃ
 
 ## 5. Deploy OpenShift
 
-- **Deployment**: 1 replica, port 8080
-- **Service**: ClusterIP
-- **Route**: URL publike HTTPS
+- **Dockerfile** multi-stage: Maven build + JRE 17
+- **BuildConfig**: build automatik nga GitHub
+- **Deployment** + **Service** + **Route** (URL publike HTTPS)
 - **Health probes**: `/actuator/health`
+- UdhÃ«zues: [OPENSHIFT.md](OPENSHIFT.md)
 
 ## 6. Testimi
 

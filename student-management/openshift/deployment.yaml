@@ -16,10 +16,11 @@ spec:
     spec:
       containers:
         - name: student-management
-          image: image-registry.openshift-image-registry.svc:5000/YOUR_PROJECT/student-management:latest
+          image: student-management:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
-              protocol: TCP
+              name: http
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: openshift
@@ -29,20 +30,21 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 20
+            initialDelaySeconds: 30
             periodSeconds: 10
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
             periodSeconds: 20
           resources:
             requests:
               memory: "256Mi"
               cpu: "100m"
             limits:
-              memory: "512Mi"
+              memory: "768Mi"
               cpu: "500m"
 ---
 apiVersion: v1
@@ -58,7 +60,6 @@ spec:
     - name: http
       port: 8080
       targetPort: 8080
-      protocol: TCP
   type: ClusterIP
 ---
 apiVersion: route.openshift.io/v1
@@ -71,6 +72,7 @@ spec:
   to:
     kind: Service
     name: student-management
+    weight: 100
   port:
     targetPort: http
   tls:

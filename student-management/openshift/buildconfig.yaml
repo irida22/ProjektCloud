@@ -1,0 +1,31 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: student-management
+  labels:
+    app: student-management
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: student-management
+  labels:
+    app: student-management
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/irida22/ProjektCloud.git
+      ref: main
+    contextDir: student-management
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: student-management:latest
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
