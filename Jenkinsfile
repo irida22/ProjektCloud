@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK-17'
-    }
-
     environment {
         PROJECT_DIR = 'student-management'
         JAR_FILE    = 'web/target/web-1.0.0-SNAPSHOT.jar'
@@ -19,7 +15,19 @@ pipeline {
             }
         }
 
-        stage('2. Build (mvn clean install)') {
+        stage('2. Verify Java') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'java -version'
+                    } else {
+                        bat 'java -version'
+                    }
+                }
+            }
+        }
+
+        stage('3. Build (mvn clean install)') {
             steps {
                 dir("${PROJECT_DIR}") {
                     script {
@@ -33,7 +41,7 @@ pipeline {
             }
         }
 
-        stage('3. Test Results (JUnit)') {
+        stage('4. Test Results (JUnit)') {
             steps {
                 dir("${PROJECT_DIR}") {
                     junit allowEmptyResults: false, testResults: '**/target/surefire-reports/*.xml'
@@ -41,7 +49,7 @@ pipeline {
             }
         }
 
-        stage('4. Archive Artifact (.jar)') {
+        stage('5. Archive Artifact (.jar)') {
             steps {
                 dir("${PROJECT_DIR}") {
                     archiveArtifacts artifacts: 'web/target/*.jar', fingerprint: true, onlyIfSuccessful: true

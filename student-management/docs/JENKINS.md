@@ -28,16 +28,17 @@ Restart Jenkins nëse kërkohet.
 
 ---
 
-## Hapi 2 — Konfiguro Tools
+## Hapi 2 — Java në Jenkins
 
-**Manage Jenkins → Tools**
+Pipeline përdor **Java të instaluar në server** (pa `tools { jdk }`).
 
-| Tool | Emri në Jenkins | Vlera |
-|------|-----------------|-------|
-| JDK | `JDK-17` | JDK 17 (ose 21) |
-| Maven | opsional | Pipeline përdor **mvnw** nga projekti |
+- Sigurohu që në makinën e Jenkins ekzekutohet: `java -version` (17 ose 21)
+- Në Windows: vendos `JAVA_HOME` te JDK (p.sh. `C:\Program Files\Java\jdk-21`)
 
-> Emri `JDK-17` duhet të përputhet me `Jenkinsfile` (tools { jdk 'JDK-17' }).
+**Opsional** — nëse do `tools { jdk 'JDK-17' }` në Jenkinsfile:
+1. **Manage Jenkins → Tools → JDK**
+2. Shto JDK me emër **`JDK-17`** (path te instalimi)
+3. Rikthe `tools { jdk 'JDK-17' }` në Jenkinsfile
 
 ---
 
@@ -94,7 +95,8 @@ Kap ekranin me:
 
 | Problem | Zgjidhje |
 |---------|----------|
-| `JDK-17 not found` | Krijo JDK tool me emrin saktë `JDK-17` |
+| `JDK-17 not found` | Jenkinsfile aktual nuk përdor tools; instalo Java në PATH |
+| `java not recognized` | Instalo JDK 17+ dhe shtoje në PATH / JAVA_HOME |
 | `mvn not found` | Pipeline përdor `mvnw.cmd` — nuk duhet Maven global |
 | `Script Path` gabim | Duhet `Jenkinsfile` (root), jo `student-management/Jenkinsfile` |
 | Testet dështojnë | Verifiko lokalisht: `.\mvnw.cmd test` |
