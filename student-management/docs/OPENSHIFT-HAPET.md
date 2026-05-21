@@ -5,7 +5,9 @@
 | **OpenShift Project** | `iridalala-dev` |
 | **Aplikacioni** | `projektcloud` |
 
-> **JAVA_HOME gabim në Web Terminal?** Përdor [`OPENSHIFT-PA-JAVA.md`](OPENSHIFT-PA-JAVA.md) — build nga GitHub, pa `mvnw`.
+> **Më e thjeshtë (pa Web Terminal):** [`OPENSHIFT-UI.md`](OPENSHIFT-UI.md) — Import from Git + Dockerfile në UI.
+
+> **JAVA_HOME gabim në Web Terminal?** Përdor [`OPENSHIFT-PA-JAVA.md`](OPENSHIFT-PA-JAVA.md).
 
 ## Para fillimit
 

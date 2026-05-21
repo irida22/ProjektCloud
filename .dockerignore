@@ -1,0 +1,9 @@
+.git
+.github
+.cursor
+**/target
+*.iml
+.idea
+docs
+agent-tools
+agent-transcripts
