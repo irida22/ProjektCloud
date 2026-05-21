@@ -1,0 +1,10 @@
+target/
+!target/student-management.jar
+.git
+.idea
+*.iml
+.mvn/wrapper/maven-wrapper.jar
+**/src
+**/test
+docs/
+scripts/
