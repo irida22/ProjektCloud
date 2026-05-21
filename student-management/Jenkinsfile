@@ -1,14 +1,11 @@
+// Alias: përdor Jenkinsfile në root të repo (ProjektCloud/Jenkinsfile)
+// Ky skedar mbetet për referencë; job-i Jenkins duhet të përdorë Script Path: Jenkinsfile
+
 pipeline {
     agent any
 
     tools {
-        maven 'Maven-3.9'
         jdk 'JDK-17'
-    }
-
-    environment {
-        APP_NAME = 'student-management'
-        ARTIFACT = 'web/target/web-1.0.0-SNAPSHOT.jar'
     }
 
     stages {
@@ -20,43 +17,25 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                dir('student-management') {
-                    sh 'mvn clean install'
+                script {
+                    if (isUnix()) {
+                        sh 'chmod +x mvnw && ./mvnw clean install'
+                    } else {
+                        bat 'mvnw.cmd clean install'
+                    }
                 }
             }
             post {
                 always {
-                    junit 'student-management/**/target/surefire-reports/*.xml'
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
 
-        stage('Archive Artifact') {
+        stage('Archive JAR') {
             steps {
-                dir('student-management') {
-                    archiveArtifacts artifacts: 'web/target/*.jar', fingerprint: true
-                }
+                archiveArtifacts artifacts: 'web/target/*.jar', fingerprint: true, onlyIfSuccessful: true
             }
-        }
-
-        stage('Build Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                dir('student-management') {
-                    sh 'docker build -t ${APP_NAME}:${BUILD_NUMBER} .'
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline completed successfully.'
-        }
-        failure {
-            echo 'Pipeline failed.'
         }
     }
 }
