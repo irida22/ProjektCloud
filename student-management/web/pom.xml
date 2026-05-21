@@ -66,10 +66,14 @@
     </dependencies>
 
     <build>
+        <finalName>student-management</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.student.management.StudentManagementApplication</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

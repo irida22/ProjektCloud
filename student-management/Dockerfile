@@ -26,7 +26,7 @@ RUN chmod +x mvnw && ./mvnw clean package -DskipTests -pl web -am -q
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-COPY --from=build /build/web/target/web-1.0.0-SNAPSHOT.jar app.jar
+COPY --from=build /build/web/target/student-management.jar app.jar
 
 EXPOSE 8080
 

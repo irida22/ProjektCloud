@@ -1,5 +1,28 @@
 # Rregullimi: "0 JARs found in /deployments"
 
+## Maven — ku eshte JAR-i?
+
+| Skedar | packaging | spring-boot-maven-plugin |
+|--------|-----------|--------------------------|
+| `pom.xml` (root) | **pom** (multi-module — e saktë) | ne pluginManagement |
+| `web/pom.xml` | **jar** | po, me repackage + mainClass |
+
+Pas build:
+
+```
+web/target/student-management.jar   ← JAR i ekzekutueshem
+```
+
+Komanda:
+
+```bash
+cd student-management
+./mvnw clean package -DskipTests -pl web -am
+ls -la web/target/student-management.jar
+```
+
+---
+
 ## Shkaku i gabimit
 
 ```

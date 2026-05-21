@@ -76,7 +76,7 @@ Pas push në `main`, Jenkins bën pull automatikisht.
    - `Tests run: 19, Failures: 0`
    - `BUILD SUCCESS`
 5. **Test Result** — 19 teste JUnit
-6. **Build Artifacts** — `web-1.0.0-SNAPSHOT.jar`
+6. **Build Artifacts** — `student-management.jar`
 
 ---
 
