@@ -7,7 +7,6 @@
     <groupId>com.student.management</groupId>
     <artifactId>student-management</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <!-- Multi-module: root = pom. JAR ekzekutueshem = web/target/student-management.jar -->
     <packaging>pom</packaging>
     <name>Student Management System</name>
     <description>Multi-module Student Management System for Agile course project</description>
