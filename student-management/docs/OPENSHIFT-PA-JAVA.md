@@ -39,7 +39,14 @@ oc start-build projektcloud-git --follow
 Prit derisa shfaqet **Push successful**.
 
 ```bash
-# Deploy + URL (nëse deployment nuk u krijua nga yaml)
+# Lidh deployment me imazhin e build-it (shmang ImagePullBackOff)
+IMG=$(oc get istag projektcloud:latest -o jsonpath='{.image.dockerImageReference}{"\n"}')
+oc set image deployment/projektcloud projektcloud="$IMG"
+oc rollout status deployment/projektcloud --timeout=5m
+```
+
+```bash
+# Deploy + URL
 oc get deployment projektcloud
 oc get route projektcloud
 

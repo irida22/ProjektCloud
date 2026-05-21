@@ -38,6 +38,9 @@ metadata:
   name: projektcloud
   labels:
     app: projektcloud
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"projektcloud:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"projektcloud\")].image"}]
 spec:
   replicas: 1
   selector:
@@ -50,8 +53,8 @@ spec:
     spec:
       containers:
         - name: projektcloud
-          image: projektcloud:latest
-          imagePullPolicy: Always
+          image: image-registry.openshift-image-registry.svc:5000/iridalala-dev/projektcloud:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
