@@ -2,7 +2,9 @@
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /build
 
-COPY mvnw mvnw.cmd .mvn ./
+# apk maven — shmang gabimin COPY .mvn ./ (kopjon wrapper/ ne /build/wrapper, jo .mvn/wrapper)
+RUN apk add --no-cache maven
+
 COPY pom.xml ./
 COPY model/pom.xml model/
 COPY dto/pom.xml dto/
@@ -20,7 +22,7 @@ COPY service/src service/src
 COPY excel/src excel/src
 COPY web/src web/src
 
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests -pl web -am -q
+RUN mvn clean package -DskipTests -pl web -am -q -B
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
