@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+    <h1>Student Management System</h1>
+    <p>Menaxhimi i studentëve — CRUD &amp; Excel Export</p>
+</header>
+
+<main>
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- 1. LIST -->
+    <section class="card" id="section-list">
+        <div class="card-header">
+            <h2>1. Shfaq listën e studentëve</h2>
+            <button type="button" class="btn btn-secondary" id="btn-refresh">Rifresko listën</button>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Emri</th>
+                    <th>Mbiemri</th>
+                    <th>Email</th>
+                    <th>Programi</th>
+                    <th>Viti</th>
+                    <th>Veprime</th>
+                </tr>
+                </thead>
+                <tbody id="students-tbody">
+                <tr><td colspan="7" class="empty">Duke ngarkuar...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 2. CREATE -->
+    <section class="card" id="section-create">
+        <h2>2. Shto student të ri</h2>
+        <form id="form-create" class="form-grid">
+            <label>Emri <input type="text" name="firstName" required></label>
+            <label>Mbiemri <input type="text" name="lastName" required></label>
+            <label>Email <input type="email" name="email" required></label>
+            <label>Programi <input type="text" name="program" required></label>
+            <label>Viti i regjistrimit <input type="number" name="enrollmentYear" min="2000" max="2100" required></label>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Shto student</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- 3. UPDATE -->
+    <section class="card" id="section-update">
+        <h2>3. Edito student</h2>
+        <p class="hint">Zgjidh një student nga lista ose shkruaj ID, pastaj ndrysho fushat.</p>
+        <form id="form-update" class="form-grid">
+            <label>ID student <input type="number" name="id" id="update-id" min="1" required></label>
+            <label>Emri <input type="text" name="firstName" required></label>
+            <label>Mbiemri <input type="text" name="lastName" required></label>
+            <label>Email <input type="email" name="email" required></label>
+            <label>Programi <input type="text" name="program" required></label>
+            <label>Viti i regjistrimit <input type="number" name="enrollmentYear" min="2000" max="2100" required></label>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="btn-load-for-edit">Ngarko për editim</button>
+                <button type="submit" class="btn btn-primary">Ruaj ndryshimet</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- 4. DELETE -->
+    <section class="card" id="section-delete">
+        <h2>4. Fshi student</h2>
+        <p class="hint">Mund të fshish nga tabela (butoni Fshi) ose me ID këtu.</p>
+        <form id="form-delete" class="form-inline">
+            <label>ID student <input type="number" name="id" id="delete-id" min="1" required></label>
+            <button type="submit" class="btn btn-danger">Fshi student</button>
+        </form>
+    </section>
+
+    <!-- 5. EXCEL -->
+    <section class="card" id="section-excel">
+        <h2>5. Eksport Excel (.xlsx)</h2>
+        <p class="hint">Gjeneron skedar Excel me listën aktuale të studentëve (Apache POI).</p>
+        <button type="button" class="btn btn-success" id="btn-export-excel">Shkarko students.xlsx</button>
+    </section>
+</main>
+
+<footer>
+    <p>API: <code>/api/students</code> · <a href="/actuator/health" target="_blank">Health</a></p>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

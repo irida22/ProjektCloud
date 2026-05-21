@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-17'
+    }
+
+    environment {
+        APP_NAME = 'student-management'
+        ARTIFACT = 'web/target/web-1.0.0-SNAPSHOT.jar'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                dir('student-management') {
+                    sh 'mvn clean install'
+                }
+            }
+            post {
+                always {
+                    junit 'student-management/**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                dir('student-management') {
+                    archiveArtifacts artifacts: 'web/target/*.jar', fingerprint: true
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                dir('student-management') {
+                    sh 'docker build -t ${APP_NAME}:${BUILD_NUMBER} .'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}

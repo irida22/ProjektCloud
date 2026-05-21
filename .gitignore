@@ -1,0 +1,24 @@
+# Build
+**/target/
+*.jar
+*.war
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+.DS_Store
+
+# Logs
+*.log
+
+# Cursor / local
+.cursor/
+agent-tools/
+agent-transcripts/
+
+# Temp
+*.tmp
+*.bak
