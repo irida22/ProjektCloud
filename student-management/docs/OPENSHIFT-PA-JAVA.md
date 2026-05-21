@@ -33,14 +33,24 @@ pwd
 
 # Build nga GitHub (5-15 min — Maven brenda Docker)
 oc apply -f buildconfig-projektcloud-git.yaml
-oc start-build projektcloud-git --follow
+oc start-build projektcloud-git
+# Nese --follow jep "timed out", shiko logun manualisht:
+# oc logs -f build/projektcloud-git-7
 ```
 
-Prit derisa shfaqet **Push successful**.
+**MOS vazhdo** derisa build te jete **Complete**:
 
 ```bash
-# Lidh deployment me imazhin e build-it (shmang ImagePullBackOff)
+oc get builds | grep projektcloud-git
+# STATUS duhet: Complete (JO Running, JO Failed)
+```
+
+Kur eshte **Complete**:
+
+```bash
+oc get istag projektcloud:latest
 IMG=$(oc get istag projektcloud:latest -o jsonpath='{.image.dockerImageReference}{"\n"}')
+echo "$IMG"
 oc set image deployment/projektcloud projektcloud="$IMG"
 oc rollout status deployment/projektcloud --timeout=5m
 ```
@@ -94,3 +104,6 @@ chmod +x mvnw
 | `ProjektCloud already exists` | `git clone` kur folderi ekziston | `cd ~/ProjektCloud && git pull` (mos `rm` nëse ke ndryshime lokale) |
 | `buildconfig-projektcloud-git.yaml does not exist` | Repo i vjetër, je në folder të gabuar | `git pull` pastaj `cd student-management/openshift` |
 | `projektcloud-git not found` | `oc apply` dështoi | Rregullo `apply` së pari, pastaj `start-build` |
+| `timed out waiting` (--follow) | Web Terminal, build ende vazhdon | `oc get builds` + `oc logs build/projektcloud-git-N` |
+| `istag projektcloud:latest not found` | Build nuk ka mbaruar | Prit **Complete**, mos `oc set image` para |
+| `image: Required value` | `oc set image` me IMG bosh | `oc rollout undo deployment/projektcloud` pastaj provo perseri |
