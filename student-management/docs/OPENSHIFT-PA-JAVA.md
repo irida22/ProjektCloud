@@ -1,5 +1,10 @@
 # OpenShift — PA Maven lokalisht (JAVA_HOME problem)
 
+| | Emri |
+|---|---|
+| **OpenShift Project** (namespace) | `iridalala-dev` |
+| **Aplikacioni** (deployment, route) | `projektcloud` |
+
 Nëse merr:
 
 ```
@@ -13,10 +18,18 @@ The JAVA_HOME environment variable is not defined correctly
 ## Komanda (kopjo një nga një)
 
 ```bash
-cd ~
-rm -rf ProjektCloud
-git clone https://github.com/irida22/ProjektCloud.git
-cd ProjektCloud/student-management/openshift
+oc login
+oc project iridalala-dev
+# duhet: "Now using project \"iridalala-dev\" on server ..."
+
+cd ~/ProjektCloud
+git pull origin main
+# VERIFIKO qe skedari ekziston:
+ls -la student-management/openshift/buildconfig-projektcloud-git.yaml
+
+cd student-management/openshift
+pwd
+# duhet: .../ProjektCloud/student-management/openshift
 
 # Build nga GitHub (5-15 min — Maven brenda Docker)
 oc apply -f buildconfig-projektcloud-git.yaml
@@ -64,3 +77,13 @@ chmod +x mvnw
 ```
 
 (Nuk është e nevojshme për Plan B.)
+
+---
+
+## Gabime të zakonshme
+
+| Gabim | Shkaku | Zgjidhja |
+|--------|--------|----------|
+| `ProjektCloud already exists` | `git clone` kur folderi ekziston | `cd ~/ProjektCloud && git pull` (mos `rm` nëse ke ndryshime lokale) |
+| `buildconfig-projektcloud-git.yaml does not exist` | Repo i vjetër, je në folder të gabuar | `git pull` pastaj `cd student-management/openshift` |
+| `projektcloud-git not found` | `oc apply` dështoi | Rregullo `apply` së pari, pastaj `start-build` |

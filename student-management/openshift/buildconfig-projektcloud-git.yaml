@@ -1,4 +1,6 @@
 # Build nga GitHub — NUK nevojitet Maven/Java ne Web Terminal
+# Para apply: oc project iridalala-dev
+# Aplikacioni: projektcloud | Namespace: iridalala-dev
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:

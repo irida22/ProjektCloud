@@ -1,8 +1,12 @@
 #!/bin/bash
 # Hapat 1-7 per deploy projektcloud (OpenShift Web Terminal)
+# Project: iridalala-dev | App: projektcloud
 set -e
 
+OC_PROJECT=iridalala-dev
 APP=projektcloud
+
+oc project "$OC_PROJECT" || { echo "Zgjidh projektin: oc project iridalala-dev"; exit 1; }
 DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$DIR"
 

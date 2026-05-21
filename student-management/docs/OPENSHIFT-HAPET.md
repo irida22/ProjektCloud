@@ -1,10 +1,19 @@
 # OpenShift — Hapat e thjeshtë (projektcloud)
 
+| | Emri |
+|---|---|
+| **OpenShift Project** | `iridalala-dev` |
+| **Aplikacioni** | `projektcloud` |
+
+> **JAVA_HOME gabim në Web Terminal?** Përdor [`OPENSHIFT-PA-JAVA.md`](OPENSHIFT-PA-JAVA.md) — build nga GitHub, pa `mvnw`.
+
 ## Para fillimit
 
 ```bash
 oc login
-oc project   # shiko projektin aktiv
+oc project iridalala-dev
+oc project -q
+# duhet printuar: iridalala-dev
 ```
 
 ---
