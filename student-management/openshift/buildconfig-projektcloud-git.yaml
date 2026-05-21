@@ -1,0 +1,95 @@
+# Build nga GitHub — NUK nevojitet Maven/Java ne Web Terminal
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: projektcloud
+  labels:
+    app: projektcloud
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: projektcloud-git
+  labels:
+    app: projektcloud
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/irida22/ProjektCloud.git
+      ref: main
+    contextDir: student-management
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile.multistage
+  output:
+    to:
+      kind: ImageStreamTag
+      name: projektcloud:latest
+  triggers:
+    - type: ConfigChange
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projektcloud
+  labels:
+    app: projektcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: projektcloud
+  template:
+    metadata:
+      labels:
+        app: projektcloud
+    spec:
+      containers:
+        - name: projektcloud
+          image: projektcloud:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: openshift
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: projektcloud
+  labels:
+    app: projektcloud
+spec:
+  selector:
+    app: projektcloud
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: projektcloud
+spec:
+  to:
+    kind: Service
+    name: projektcloud
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
