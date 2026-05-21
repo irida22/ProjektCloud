@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PROJECT_DIR = 'student-management'
-        JAR_FILE    = 'web/target/web-1.0.0-SNAPSHOT.jar'
+        JAR_FILE    = 'web/target/student-management.jar'
     }
 
     stages {
