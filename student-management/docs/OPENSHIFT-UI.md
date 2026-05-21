@@ -2,9 +2,11 @@
 
 Projekti: **iridalala-dev** · Aplikacioni: **projektcloud**
 
+> Nëse merr **`ghcr.io/... denied`** → përdor **Opsionin A** ose bëje paketën **Public** (shiko më poshtë).
+
 ---
 
-## Opsioni A — Import from Git (më i thjeshtë)
+## Opsioni A — Import from Git (më i thjeshtë) ⭐
 
 OpenShift ndërton imazhin vetë nga `Dockerfile` (Docker, **jo** Java S2I).
 
@@ -41,23 +43,23 @@ OpenShift ndërton imazhin vetë nga `Dockerfile` (Docker, **jo** Java S2I).
 
 Imazhi ndërtohet në GitHub dhe OpenShift e tërheq.
 
-### 1. Push në GitHub
+### 1. Verifiko që imazhi ekziston
 
-Çdo push në `main` (në `student-management/`) nis workflow-in:
+**GitHub** → **Actions** → **Docker Build and Push** → duhet ✅ **Success**.
 
-`.github/workflows/docker-build-push.yml`
+Pastaj: **GitHub** → foto profili → **Your packages** → duhet **`projektcloud`**.
 
-Shiko: **GitHub** → **Actions** → **Docker Build and Push** → ✅ Success.
+Nëse Actions dështon ose nuk ka paketë → Opsioni B nuk funksionon ende.
 
-### 2. Bëje paketën publike (herën e parë)
+### 2. Bëje paketën **Public** (e detyrueshme për OpenShift pa secret)
 
-**GitHub** → profili → **Packages** → `projektcloud` → **Package settings** → **Change visibility** → **Public**.
+1. Hap: https://github.com/users/irida22/packages
+2. Kliko **projektcloud**
+3. **Package settings** (djathtas)
+4. Scroll → **Danger Zone** → **Change package visibility** → **Public**
+5. Konfirmo emrin e paketës
 
-(Ose krijo **Pull Secret** në OpenShift për GHCR private.)
-
-### 3. OpenShift UI
-
-**+ Add** → **Container Image**
+### 3. OpenShift UI — Container Image
 
 | Fushë | Vlera |
 |--------|--------|
@@ -66,6 +68,38 @@ Shiko: **GitHub** → **Actions** → **Docker Build and Push** → ✅ Success.
 | Create a route | ✅ |
 
 **Create**
+
+---
+
+## Gabim: `ghcr.io/... denied`
+
+OpenShift **nuk ka leje** të lexojë imazhin nga GHCR (zakonisht paketa **private**).
+
+### Zgjidhja 1 — Public (më e lehtë)
+
+Bëj hapat e **Opsionit B, pika 2** më sipër. Pastaj:
+
+- Fshi deployment-in e dështuar
+- **+ Add** → **Container Image** → përsëri `ghcr.io/irida22/projektcloud:latest`
+
+### Zgjidhja 2 — Pull Secret (nëse e lë private)
+
+1. **GitHub** → **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**
+2. **Generate** → scope: **`read:packages`** → kopjo token-in
+3. **OpenShift** → projekti `iridalala-dev` → **Workloads** → **Secrets** → **Create** → **Image pull secret**
+   - Type: **Image pull secret**
+   - Name: `ghcr-pull`
+   - Registry: `ghcr.io`
+   - Username: `irida22`
+   - Password: *(token-i PAT)*
+   - Email: `irida22@users.noreply.github.com`
+4. Lidh secret-in me service account:
+   - **Workloads** → **Service Accounts** → **default** → **Secrets** → **Add secret** → `ghcr-pull` (Image pull)
+5. Rikrijo deployment-in (Container Image)
+
+### Zgjidhja 3 — Mos përdor GHCR (rekomandohet)
+
+Përdor **Opsionin A — Import from Git** (OpenShift ndërton vetë, pa `ghcr.io`, pa `denied`).
 
 ---
 
