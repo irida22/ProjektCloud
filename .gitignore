@@ -22,3 +22,7 @@ agent-transcripts/
 # Temp
 *.tmp
 *.bak
+
+# README (local only, not in repo)
+README.md
+**/README.md
