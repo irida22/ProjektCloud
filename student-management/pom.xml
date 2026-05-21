@@ -7,6 +7,7 @@
     <groupId>com.student.management</groupId>
     <artifactId>student-management</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <!-- Multi-module: root = pom. JAR ekzekutueshem = web/target/student-management.jar -->
     <packaging>pom</packaging>
     <name>Student Management System</name>
     <description>Multi-module Student Management System for Agile course project</description>
@@ -100,6 +101,29 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
             </plugin>
+            <!-- Kopjon JAR ne target/ (per OpenShift S2I: target/*.jar) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>copy-runnable-jar-to-root-target</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.basedir}/target"/>
+                                <copy file="${project.basedir}/web/target/student-management.jar"
+                                      tofile="${project.basedir}/target/student-management.jar"
+                                      failonerror="true"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -134,6 +158,11 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
